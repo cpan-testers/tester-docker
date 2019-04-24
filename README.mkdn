@@ -1,0 +1,59 @@
+# NAME
+
+entrypoint.pl - Entry point for CPAN Testers tester Docker container
+
+# SYNOPSIS
+
+```perl
+# Build Docker container with name "tester"
+docker build . --tag tester
+# Build Docker container with official Perl 5.26 container
+docker build . --build-arg BASE=perl:5.26 --tag tester:5.26
+
+# Configure `cpanm-reporter`
+# The ./config directory will store the persistent shared configuration
+docker run -it -v $(pwd)/config:/etc/cpanm-reporter tester
+
+# Run tests for a module
+# This uses the same ./config directory for the shared config
+# This accepts any arguments / module syntax supported by `cpanm`
+docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester <module>
+
+# View help and usage
+docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester --help
+```
+
+# DESCRIPTION
+
+This program is a friendly entry point for the CPAN Testers tester
+Docker container. Running the Docker container without arguments will
+run the [App::cpanminus::reporter](https://metacpan.org/pod/App::cpanminus::reporter) configuration script. Running with
+arguments will attempt to install the given module(s) using
+[App::cpanminus](https://metacpan.org/pod/App::cpanminus) (by passing all arguments directly to `cpanm`,
+including `cpanm` options) and then run `cpanm-reporter` to analyze
+the installation results and send the test reports.
+
+# ARGUMENTS
+
+## &lt;module>
+
+A module to test. This supports any module syntax supported by
+[App::cpanminus](https://metacpan.org/pod/App::cpanminus).
+
+```
+# Run tests for the latest Mojolicious
+docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester Mojolicious
+
+# Run tests for version 8.00 of Mojolicious
+docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester Mojolicious@8.00
+```
+
+# OPTIONS
+
+## `-h` `--help`
+
+View basic help and usage.
+
+# SEE ALSO
+
+[http://docker.com](http://docker.com), [http://cpantesters.org](http://cpantesters.org)
