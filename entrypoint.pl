@@ -18,18 +18,18 @@ entrypoint.pl - Entry point for CPAN Testers tester Docker container
 
     # Configure `cpanm-reporter`
     # The ./config directory will store the persistent shared configuration
-    docker run -it -v $(pwd)/config:/etc/cpanm-reporter tester
+    docker run -it --rm -v $(pwd)/config:/etc/cpanm-reporter tester
 
     # Run tests for a module
     # This uses the same ./config directory for the shared config
     # This accepts any arguments / module syntax supported by `cpanm`
-    docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester <module>
+    docker run -t --rm -v $(pwd)/config:/etc/cpanm-reporter tester <module>
 
     # Run tests with our baked-in prereq
-    docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester:5.26-ssl <module>
+    docker run -t --rm -v $(pwd)/config:/etc/cpanm-reporter tester:5.26-ssl <module>
 
     # View help and usage
-    docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester --help
+    docker run -t --rm -v $(pwd)/config:/etc/cpanm-reporter tester --help
 
 =head1 DESCRIPTION
 
