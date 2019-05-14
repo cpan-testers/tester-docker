@@ -11,6 +11,11 @@ entrypoint.pl - Entry point for CPAN Testers tester Docker container
     # Build Docker container with official Perl 5.26 container
     docker build . --build-arg BASE=perl:5.26 --tag tester:5.26
 
+    # Build Docker container with a specific prereq (installed with
+    # `cpanm ${PREREQ}`)
+    docker build . --build-arg PREREQ=IO::Socket::SSL@2.066 \
+        --tag tester-ssl:2.066
+
     # Configure `cpanm-reporter`
     # The ./config directory will store the persistent shared configuration
     docker run -it -v $(pwd)/config:/etc/cpanm-reporter tester
@@ -19,6 +24,9 @@ entrypoint.pl - Entry point for CPAN Testers tester Docker container
     # This uses the same ./config directory for the shared config
     # This accepts any arguments / module syntax supported by `cpanm`
     docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester <module>
+
+    # Run tests with our baked-in prereq
+    docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester:5.26-ssl <module>
 
     # View help and usage
     docker run -t -v $(pwd)/config:/etc/cpanm-reporter tester --help
